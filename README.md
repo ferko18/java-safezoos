@@ -17,6 +17,7 @@ This is REST API server which stores data in an H2 database. The table layouts s
   * zooid - long primary key
   * zooname - String
 
+
 * Telephone
   * phoneid - long primary key
   * phonetype - String
