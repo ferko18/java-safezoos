@@ -1,15 +1,13 @@
-package com.lambdaschool.zoos;
+package zoos.zoos;
 
-// Vivek Vishwanath
-
-import com.lambdaschool.zoos.model.Role;
-import com.lambdaschool.zoos.model.User;
-import com.lambdaschool.zoos.model.UserRoles;
-import com.lambdaschool.zoos.repository.RoleRepository;
-import com.lambdaschool.zoos.repository.UserRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+import zoos.zoos.model.Role;
+import zoos.zoos.model.User;
+import zoos.zoos.model.UserRoles;
+import zoos.zoos.repo.RoleRepository;
+import zoos.zoos.repo.UserRepository;
 
 import java.util.ArrayList;
 
@@ -17,52 +15,36 @@ import java.util.ArrayList;
 @Component
 public class SeedData implements CommandLineRunner
 {
+	RoleRepository rolerepos;
+	UserRepository userrepos;
 
-    RoleRepository rolerepos;
-    UserRepository userrepos;
+	public SeedData(RoleRepository rolerepos, UserRepository userrepos)
+	{
+		this.rolerepos = rolerepos;
+		this.userrepos = userrepos;
+	}
 
-    public SeedData(RoleRepository rolerepos, UserRepository userrepos)
-    {
-        this.rolerepos = rolerepos;
-        this.userrepos = userrepos;
-    }
+	@Override
+	public void run(String[] args) throws Exception
+	{
+		Role r1 = new Role("admin");
+		Role r2 = new Role("zoodata");
 
-    @Override
-    public void run(String[] args) throws Exception
-    {
-        Role r1 = new Role("ADMIN");
-        Role r2 = new Role("ZOODATA");
-        Role r3 = new Role("ANIMALDATA");
-        Role r4 = new Role("MGR");
+		ArrayList<UserRoles> admins = new ArrayList<>();
+		admins.add(new UserRoles(new User(), r1));
+		admins.add(new UserRoles(new User(), r2));
 
-        rolerepos.save(r1);
-        rolerepos.save(r2);
-        rolerepos.save(r3);
-        rolerepos.save(r4);
+		ArrayList<UserRoles> users = new ArrayList<>();
+		users.add(new UserRoles(new User(), r2));
 
-        ArrayList<UserRoles> admins = new ArrayList<>();
-        admins.add(new UserRoles(new User(), r1));
-        User u1 = new User("admin", "password", admins);
-        userrepos.save(u1);
+		rolerepos.save(r1);
+		rolerepos.save(r2);
 
-        ArrayList<UserRoles> zoodata = new ArrayList<>();
-        zoodata.add(new UserRoles(new User(), r2));
-        User u2 = new User("barnbarn", "ILuvM4th!", zoodata);
-        userrepos.save(u2);
+		User u1 = new User("erko", "erko", users);
 
-        ArrayList<UserRoles> animaldata = new ArrayList<>();
-        animaldata.add(new UserRoles(new User(), r3));
-        User u3 = new User("jane", "password", animaldata);
-        userrepos.save(u3);
+		User u2 = new User("admin", "password", admins);
 
-        ArrayList<UserRoles> mgrdata = new ArrayList<>();
-        mgrdata.add(new UserRoles(new User(), r4));
-        User u4 = new User("bob", "password", mgrdata);
-        userrepos.save(u4);
-
-        admins = new ArrayList<>();
-        admins.add(new UserRoles(new User(), r1));
-        User u5 = new User("hops", "password", admins);
-        userrepos.save(u5);
-    }
+		userrepos.save(u1);
+		userrepos.save(u2);
+	}
 }
